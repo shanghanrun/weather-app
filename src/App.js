@@ -12,8 +12,10 @@ import WeatherButton from './component/WeatherButton';
 //6. 로딩스피너
 
 function App() {
+  const apiKey ='3b37f6cba7de33d06a1f3edc2f2fa085'
   const [weather, setWeather] = useState(null)
-  const cities =['paris', 'new york', 'tokyo', 'seoul']
+  const [city, setCity] = useState('')
+  const cities =['Paris', 'New York', 'London', 'Seoul']
   const getCurrentLocation=()=>{
     navigator.geolocation.getCurrentPosition((position)=>{
       let lat = position.coords.latitude;   // 문자열이 아니라 숫자라서 substring안된다.
@@ -29,16 +31,35 @@ function App() {
     const resp = await fetch(url)
     const data = await resp.json()
     console.log('data : ',data ) 
-	setWeather(data)
+	  setWeather(data)
+    // setCity(data?.name)
   }
+
+  async function getWeatherByCity(){
+    // let url ='https://api.openweathermap.org/data/2.5/weather?q=London&appid={API key}'
+    let url =`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+
+    const resp = await fetch(url)
+    const data = await resp.json()
+    console.log('data : ',data ) 
+    setWeather(data)
+  }
+
   useEffect(()=>{
-    getCurrentLocation();
-  },[])
+    if(city ==''){
+      getCurrentLocation();
+    } else{
+      getWeatherByCity()
+    }
+  },[city]);
+
   return (
     <div >
       <div className="container">
         <WeatherBox weather={weather}/>
-        <WeatherButton cities={cities} />
+        <WeatherButton 
+          cities={cities} 
+          setCity={setCity}/>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ function App() {
     navigator.geolocation.getCurrentPosition((position)=>{
       let lat = position.coords.latitude;   // 문자열이 아니라 숫자라서 substring안된다.
       let lon = position.coords.longitude;
-      console.log('lat : ',lat.toFixed(2) );
+      console.log('lat : ',lat );
       console.log('lon : ',lon.toFixed(2) )
       getCurrentLocationWeather(lat, lon);
     });
